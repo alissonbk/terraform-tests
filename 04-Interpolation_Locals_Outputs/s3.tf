@@ -23,8 +23,18 @@ resource "aws_s3_bucket_acl" "this" {
 
 //Object
 resource "aws_s3_object" "this" {
-  bucket = aws_s3_bucket.this.id
-  key    = "config/${local.ip_filepath}"
-  source = local.ip_filepath
-  etag   = filemd5(local.ip_filepath)
+  bucket       = aws_s3_bucket.this.id
+  key          = "config/${local.ip_filepath}"
+  source       = local.ip_filepath
+  etag         = filemd5(local.ip_filepath)
+  content_type = local.content_type
+}
+
+resource "aws_s3_object" "random" {
+  bucket       = aws_s3_bucket.this.id
+  key          = "config/${random_pet.bucket.id}.json"
+  source       = local.ip_filepath
+  etag         = filemd5(local.ip_filepath)
+  tags         = local.common_tags
+  content_type = local.content_type
 }
